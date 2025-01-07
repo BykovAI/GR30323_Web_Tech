@@ -1,0 +1,119 @@
+﻿@page "/products"
+@rendermode InteractiveServer
+@using GR30323_Web.Domain.Entities
+@using GR30323_Blazor.Services
+@inject IBlazorProductService<Car> ProductService
+
+
+<h3>Список автомобилей</h3>
+
+
+ <CascadingValue Value="ProductService">
+    <!-- Отображение списка автомобилей -->
+    <CarList OnCarSelected="ShowDetails" />
+</CascadingValue>
+ 
+    @if (ProductService?.Items != null && ProductService.Items.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Цена</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var car in ProductService.Items)
+                {
+                    <tr>
+                        <td>@car.Name</td>
+                        <td>@car.Description</td>
+                        <td>@car.Price.ToString("C")</td>
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => OnCarSelected(car.Id)">Подробнее</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Пагинация -->
+        <nav>
+            <ul class="pagination">
+                <li class="page-item @(ProductService.CurrentPage == 1 ? "disabled" : "")">
+                    <button class="page-link" @onclick="async () => await ChangePage(ProductService.CurrentPage - 1)">Назад</button>
+                </li>
+                @for (int i = 1; i <= ProductService.TotalPages; i++)
+                {
+                    <li class="page-item @(ProductService.CurrentPage == i ? "active" : "")">
+                        <button class="page-link" @onclick="async () => await ChangePage(i)">@i</button>
+                    </li>
+                }
+                <li class="page-item @(ProductService.CurrentPage == ProductService.TotalPages ? "disabled" : "")">
+                    <button class="page-link" @onclick="async () => await ChangePage(ProductService.CurrentPage + 1)">Вперед</button>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <p>Список пуст или загружается...</p>
+    }
+
+
+@if (SelectedCar != null)
+{
+    <CarDetails Car="SelectedCar" />
+}
+
+
+@if (SelectedCar != null)
+{
+        <p>Выбрана машина: @SelectedCar.Name</p>
+
+                    <div class="card mt-5" style="width: 25rem;">
+                
+
+                                <img src="@(string.IsNullOrEmpty(SelectedCar.Image) ? "/images/default-car.png" : SelectedCar.Image)"
+                                             alt="@SelectedCar.Name" class="card-img-top" />
+
+
+                <div class="card-body">
+                        <h5 class="card-title">@SelectedCar.Name</h5>
+                        <p class="card-text">@SelectedCar.Description</p>
+                        <h4 class="badge bg-info">Цена: @SelectedCar.Price.ToString("C")</h4>
+                </div>
+            </div>
+}
+else
+{
+        <p>Машина не выбрана</p>
+}
+
+
+@code {
+    public Car? SelectedCar { get; set; } // Выбранный автомобиль
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Загружаем первую страницу автомобилей
+        await ProductService.GetProducts();
+    }
+
+    private async Task ChangePage(int pageNo)
+    {
+        if (pageNo >= 1 && pageNo <= ProductService.TotalPages)
+        {
+            await ProductService.GetProducts(pageNo);
+            StateHasChanged();
+        }
+    }
+
+    private void OnCarSelected(int id)
+    {
+        SelectedCar = ProductService.Items.FirstOrDefault(car => car.Id == id);
+        StateHasChanged();
+    }
+}

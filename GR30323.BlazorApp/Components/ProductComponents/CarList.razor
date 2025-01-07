@@ -1,0 +1,71 @@
+﻿@rendermode InteractiveServer
+@using GR30323_Web.Domain.Entities
+@using Microsoft.AspNetCore.Components
+@using GR30323_Blazor.Services
+
+<h3>Список автомобилей 2</h3>
+@if (ProductService?.Items != null && ProductService.Items.Any())
+{
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var car in ProductService.Items)
+            {
+                        <tr>
+                            <td>@car.Name</td>
+                            <td>
+                                <button class="btn btn-primary" @onclick="() => OnCarSelected.InvokeAsync(car.Id)">Подробно</button>
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+else
+{
+        <p>Загрузка данных или список пуст...</p>
+}
+
+<!-- Пагинация -->
+@if (ProductService?.TotalPages > 1)
+{
+        <nav>
+            <ul class="pagination">
+                <li class="page-item @(ProductService.CurrentPage == 1 ? "disabled" : "")">
+                    <button class="page-link" @onclick="() => ChangePage(ProductService.CurrentPage - 1)">Назад</button>
+                </li>
+            @for (int i = 1; i <= ProductService.TotalPages; i++)
+            {
+            <li class="page-item @(ProductService.CurrentPage == i ? "active" : "")">
+                <span class="page-link">@i</span>
+            </li>
+            }
+
+                <li class="page-item @(ProductService.CurrentPage == ProductService.TotalPages ? "disabled" : "")">
+                    <button class="page-link" @onclick="() => ChangePage(ProductService.CurrentPage + 1)">Вперед</button>
+                </li>
+            </ul>
+        </nav>
+}
+
+@code {
+    [CascadingParameter]
+    public IBlazorProductService<Car> ProductService { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnCarSelected { get; set; }
+
+    private async Task ChangePage(int pageNo)
+    {
+        // Проверяем, что номер страницы находится в пределах допустимого диапазона
+        if (pageNo > 0 && pageNo <= ProductService.TotalPages)
+        {
+            await ProductService.GetProducts(pageNo);
+        }
+    }
+}

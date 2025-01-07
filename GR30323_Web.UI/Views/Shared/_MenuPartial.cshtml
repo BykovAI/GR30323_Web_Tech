@@ -1,0 +1,12 @@
+﻿<a class="navbar-brand" href="#">WebLabsV08</a>
+<div class="navbar-nav">
+   
+    <a class="nav-item nav-link" href="/Catalog">Каталог</a>
+
+    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+    {
+             <a class="nav-item nav-link" href="@Url.Action("Index", "Admin", new { area = "Admin" })">Администрирование</a>
+    }
+    }
+
+</div>

@@ -1,0 +1,10 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString()?.ToLower() ?? String.Empty;
+    var area = ViewContext.RouteData.Values["area"]?.ToString()?.ToLower() ?? String.Empty;
+}
+
+<a class="navbar-brand" href="#">WebLabsV08</a>
+<div class="navbar-nav">    
+    <a class="nav-item nav-link @(controller=="Product"?"active":"")" asp-controller="Product" asp-action="Index">Каталог</a>
+    <a class="nav-item nav-link" @(area == "admin" ? "active" : "")" asp-area="admin" asp-page="/index">Администрирование</a>
+</div>

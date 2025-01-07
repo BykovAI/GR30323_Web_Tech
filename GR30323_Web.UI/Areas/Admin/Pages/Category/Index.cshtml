@@ -1,0 +1,52 @@
+﻿@page
+@model GR30323_Web.UI.Areas.Admin.Pages.Category.CategoryIndexModel
+
+<h1>Categories</h1>
+
+<p>
+       <a asp-page="./Create" class="btn btn-success">
+    <i class="fa fa-plus"></i> Create New Category
+</a>
+
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Categories[0].Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Categories)
+        {
+                <tr>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+               
+
+                            <!-- Edit -->
+    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary">
+        <i class="fa fa-pencil"></i> Edit
+    </a>
+
+    <!-- Details -->
+    <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-info">
+        <i class="fa fa-info-circle"></i> Details
+    </a>
+
+    <!-- Delete -->
+    <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger">
+        <i class="fa fa-trash"></i> Delete
+    </a>
+
+
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,21 @@
+﻿@page
+@model GR30323_Web.UI.Areas.Admin.Pages.Car.TestUploadModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Upload</title>
+</head>
+<body>
+    <h1>Тест загрузки файла</h1>
+ <form id="form1" enctype="multipart/form-data" runat="server">
+   <div>
+            <label for="uploadFile">Загрузить изображение:</label>
+            <input type="file" id="uploadFile" name="uploadFile" />
+        </div>
+        <button type="submit">Загрузить</button>
+</form>
+</body>
+</html>

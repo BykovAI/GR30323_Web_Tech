@@ -1,0 +1,85 @@
+﻿@page
+@model GR30323_Web.UI.Areas.Admin.Pages.Car.CarIndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+   
+
+    <a asp-page="Create" class="btn btn-primary">
+    <i class="fa fa-plus"></i> Create New
+</a>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Cars[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cars[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cars[0].Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cars[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cars[0].Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Cars != null && Model.Cars.Any())
+        @foreach (var item in Model.Cars ?? new List<Car>())
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+               <td>
+                                    <img src="@(string.IsNullOrEmpty(item.Image) ? "/images/default-car.png" : item.Image)" 
+                                 alt="@item.Name" class="img-thumbnail" style="width:100px;" />
+                    </td>
+            <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+       
+
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-success">
+        <i class="fa fa-pencil"></i> Edit
+    </a>
+
+      
+
+                    <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-info">
+        <i class="fa fa-info-circle"></i> Details
+    </a>
+              
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger">
+        <i class="fa fa-trash"></i> Delete
+    </a>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+
+

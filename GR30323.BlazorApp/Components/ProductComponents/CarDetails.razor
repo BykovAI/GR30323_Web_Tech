@@ -1,0 +1,27 @@
+﻿@using GR30323_Web.Domain.Entities
+@using Microsoft.AspNetCore.Components
+@using GR30323_Blazor.Services
+
+
+КУКУ!
+
+@if (Car != null)
+{
+        <div class="card mt-5" style="width: 18rem;">
+            <img src="@Car.Image" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@Car.Name</h5>
+                <p class="card-text">@Car.Description</p>
+                <h4 class="badge bg-info">Цена: @Car.Price.ToString("C")</h4>
+            </div>
+        </div>
+}
+else
+{
+        <p>Данные о машине не найдены.</p>
+}
+
+@code {
+    [Parameter]
+    public Car? Car { get; set; }
+}
